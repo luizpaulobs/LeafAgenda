@@ -1,0 +1,123 @@
+﻿@model List<AgendaLeaf.Models.Eventos>
+@{
+    ViewData["Title"] = "Agenda";
+    var listaDatas = ViewData["listaDatas"] as IEnumerable<AgendaLeaf.Models.DatasViewModel>;
+    var pesquisaData = ViewData["pesquisaData"] as string;
+    var userId = ViewData["userId"] as string;
+    var nomeUsuario = ViewData["nomeUsuario"];
+}
+
+@functions {
+    
+    public bool DeveOcultar(string id, string? usuarId, bool compartilhado)
+    {
+        if (id != usuarId)
+        {
+            return true;
+        } else
+        {
+            return false;
+        }
+    }
+}
+
+<div>
+    <h2>Agenda - @nomeUsuario</h2>
+</div>
+<div class="container my-4">
+    <div class="row">
+        <form asp-controller="Agenda" asp-action="Index" method="post" class="col"> 
+            <div class="row">
+                <div class="col-8">
+                    <input type="date" class="form-control" id="Pesquisa" name="Pesquisa" value="@pesquisaData" />
+                </div>
+                <div class="col">
+                    <button type="submit" class="btn btn-info">Pesquisar</button>
+                </div>
+            </div>
+        </form>
+        <div class="col ml-2">
+            <a asp-action="Index" asp-controller="Agenda"><button class="btn btn-info">Limpar</button></a>
+        </div>
+        <div class="col text-end">
+            <a asp-action="LogOut" asp-controller="Agenda"><button class="btn btn-secondary">Sair</button></a>
+        </div>
+    </div>
+</div>
+@foreach (var item in listaDatas)
+{
+    <div class="accordion" id="painelAgenda">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-10">
+                        <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#@item.Identificadores">
+                            @item.Datas
+                        </button>
+                    </div>
+                    <div class="col-2">
+                        <a href="@Url.Action("Create", "Eventos", new {data = item.Datas})" class="btn btn-sm btn-outline-dark">Novo evento</a>
+                    </div>
+                </div>
+            </div>
+            <div id="@item.Identificadores" class="collapse show" data-parent="#painelAgenda">
+                <div class="card-body">
+                    @if(Model != null)
+                    {
+                        @foreach(var evento in Model)
+                        {
+                            var hidden = DeveOcultar(evento.UsuarioId.ToString(), userId, evento.Compartilhado);
+                            @if(@DateTime.Parse(evento.Data).ToShortDateString() == item.Datas)
+                            { 
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-2">
+                                            <text>Nome: @evento.Nome</text>
+                                        </div>
+                                        <div class="col">
+                                            <text>Descrição: @evento.Descricao</text>
+                                        </div>
+                                        <div class="col-1">
+                                            <text>Partic.: @evento.Participantes</text>
+                                        </div>
+                                        <div class="col-1">
+                                            <text>Hora: @evento.Hora</text>
+                                        </div>
+                                        <div class="col-1">
+                                            @if (evento.Compartilhado)
+                                            {
+                                                <text>Compartilhado</text>
+                                            }else
+                                            {
+                                                <text>Exclusivo</text>
+                                            }
+                                        </div>
+                                        <div class="col-3">
+                                            <div class="row" id="@evento.UsuarioId" style="@(hidden ? "display: none" : "")">
+                                                <div class="col">
+                                                    <a href="@Url.Action("Edit", "Eventos", new {id = evento.Id})" class="btn btn-primary">
+                                                        <i class="bi bi-pencil"></i> Editar
+                                                    </a>
+                                                </div>
+
+                                                <!-- Botão de excluir -->
+                                                <div class="col">
+                                                    <a asp-controller="Agenda" asp-action="Delete" asp-route-id="@evento.Id" class="btn btn-danger" onclick="return confirm('Deseja realmente excluir?');">
+                                                        <i class="bi bi-trash"></i> Excluir
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                </div>
+                             }  
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+

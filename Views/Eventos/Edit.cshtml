@@ -1,0 +1,56 @@
+﻿@model AgendaLeaf.Models.Eventos
+
+@{
+    ViewData["Title"] = "Edit";
+    //Layout = "~/Views/Evento/Create.cshtml";
+}
+
+<h1>Editar Evento</h1>
+
+<h4>Evento dia @DateTime.Parse(@Model.Data).ToShortDateString()</h4>
+<hr />
+<div class="row">
+    <div class="col">
+        <form asp-action="EditEvent">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Nome" class="control-label"></label>
+                <input asp-for="Nome" class="form-control" />
+                <span asp-validation-for="Nome" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Descricao" class="control-label"></label>
+                <input asp-for="Descricao" class="form-control" />
+                <span asp-validation-for="Descricao" class="text-danger"></span>
+            </div>
+            <input asp-for="Data" class="form-control" hidden />
+            <div class="form-group">
+                <label asp-for="Hora" class="control-label"></label>
+                <input asp-for="Hora" class="form-control" type="time" />
+                <span asp-validation-for="Hora" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Participantes" class="control-label"></label>
+                <input asp-for="Participantes" class="form-control" />
+                <span asp-validation-for="Participantes" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check my-2">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Compartilhado" /> @Html.DisplayNameFor(model => model.Compartilhado)
+                </label>
+            </div>
+            <div class="card-footer">
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-success" />
+                    <a href="@Url.Action("Index", "Agenda")" class="btn btn-link btn-sm">Voltar</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

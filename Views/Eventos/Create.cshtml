@@ -1,0 +1,43 @@
+﻿@model AgendaLeaf.Models.Eventos
+
+@{
+    ViewData["Title"] = "Create - " + @Model.Data;
+    //Layout = "~/Views/Eventos/Create.cshtml";
+}
+
+<h1>Novo Evento - @Model.Data</h1>
+<form asp-action="CreateEvent" method="post">
+    <div class="form-group">
+        <label for="Nome" class="control-label">Nome</label>
+        <input type="text" class="form-control" id="Nome" name="Nome" />
+    </div>
+    <input type="date" class="form-control" id="Data" name="Data" value="@DateTime.Parse(Model.Data).ToString("yyyy-MM-dd")" hidden/> 
+    <div class="form-group">
+        <label for="Hora" class="control-label">Hora</label>
+        <input name="Hora" class="form-control" type="time" />
+        <span asp-validation-for="Hora" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Descricao">Descrição</label>
+        <textarea class="form-control" id="Descricao" name="Descricao"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="Description">Participantes</label>
+        <textarea class="form-control" id="Participantes" name="Participantes"></textarea>
+    </div>
+    <div class="form-group form-check my-2">
+        <label class="form-check-label">
+            <input class="form-check-input" asp-for="Compartilhado" /> @Html.DisplayNameFor(model => model.Compartilhado)
+        </label>
+    </div>
+    <div class="card-footer">
+        <div class="form-group">
+            <button type="submit" class="btn btn-success">Salvar</button>
+            <a href="../Agenda/Index" class="btn btn-link btn-sm">Voltar</a>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

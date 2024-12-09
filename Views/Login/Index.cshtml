@@ -1,0 +1,27 @@
+﻿@model AgendaLeaf.Models.Usuario
+
+@{
+    ViewData["Title"] = "Login";
+    //Layout = "~/Views/Eventos/Create.cshtml";
+}
+
+<h2>Login</h2>
+
+<form method="post" asp-action="Logar" asp-controller="Login">
+    <div class="form-group">
+        <label class="form-label" for="Email">Email:</label>
+        <input class="form-control" type="email" id="Email" name="Email" value="@Model.Email" required />
+        @*  @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+        <p style="color: red;">@Model.ErrorMessage</p>
+        } *@
+    </div>
+    <div class="form-group">
+        <label class="form-label" for="Password">Senha:</label>
+        <input class="form-control" type="password" id="Senha" name="Senha" required />
+    </div>
+    <button class="btn btn-success my-2" type="submit">Entrar</button>
+</form>
+<div>
+    <a asp-action="Cadastrar" asp-controller="Login">Clique aqui para cadastrar</a>
+</div>
